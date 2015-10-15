@@ -2,7 +2,7 @@ var express         = require('express'),
     router          = express.Router(),
     mongoose        = require('mongoose'),
     bodyParser      = require('body-parser'),
-    methodOverride  = require('mehtod-override');
+    methodOverride  = require('method-override');
 
 router.use(bodyParser.urlencoded({ extended: true}))
 router.use(methodOverride(function(req, res){
@@ -16,7 +16,7 @@ router.use(methodOverride(function(req, res){
 // thie REST operation of our controller
 router.route('/')
   .get(function(req, res, next){
-    mogoose.model('Blob').find({}, function(err, blobs){
+    mongoose.model('Blob').find({}, function(err, blobs){
         if (err){
           return console.error(err);
         } else {
@@ -70,9 +70,10 @@ router.get('/new', function(req, res){
 router.param('id', function(req, res, next, id){
   mongoose.model('Blob').findById(id, function(err, blob){
     if(err){
-      console.log((id + 'was not found');
+      console.log(id + 'was not found');
       res.status(404)
-      var err = new Erro('Not Found');
+      var err = new Error('Not Found');
+
       err.status = 404;
       res.format({
         html: function(){
@@ -94,10 +95,11 @@ router.route('/:id')
   .get(function(req, res){
     mongoose.model('Blob').findById(req.id, function (err, blob){
       if(err){
-        console.log('GET Erro: There was a problem retrueving: ' + err);
+        console.log('GET Error: There was a problem retrieving: ' + err);
       }else {
         console.log('GET Retrieving ID: ' + blob._id);
-        var blobdob.substring(0, blobdob.indexOf('T'))
+        var blobdob = blob.dob.toISOString();
+        blobdob = blobdob.substring(0, blobdob.indexOf('T'))
         res.format({
           html: function(){
             res.render('blobs/show', {
@@ -114,7 +116,7 @@ router.route('/:id')
   });
 
 router.get('/:id/edit', function(req, res){
-  mogoose.model('Blob').findById(req.id, function(err, blob){
+  mongoose.model('Blob').findById(req.id, function(err, blob){
       if(err){
         console.log('GET Error: There was a problem retrieving: ' + err);
       } else {
@@ -123,7 +125,7 @@ router.get('/:id/edit', function(req, res){
         blobdob = blobdob.substring(0, blobdob.indexOf('T'))
           res.format({
             html: function(){
-              res.render('blob/edit', {
+              res.render('blobs/edit', {
                 title     : 'Blob' + blob._id,
                 "blobdob" : blobdob,
                 "blob"    : blob
@@ -167,7 +169,7 @@ router.put('/:id/edit', function(req, res){
 });
 
 router.delete('/:id/edit', function(req, res){
-  mogoose.model('Blob').findById(req.id, function(err, blob){
+  mongoose.model('Blob').findById(req.id, function(err, blob){
     if(err){
       return console.error(err);
     } else {
