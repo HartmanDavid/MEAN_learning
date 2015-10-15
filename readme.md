@@ -1,0 +1,1 @@
+THIS Repo is for learning the basic foundation of the MEAN STACK. When I am complete I will be able to build a MEAN stack skeleton from ground-up - with no assistance - from memory. The task starts today 10-12-2015 :-)
